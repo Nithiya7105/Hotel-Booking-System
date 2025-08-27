@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Hotel Booking System</title>
+  <link rel="shortcut icon" href="data:image/x-icon;," type="image/x-icon">
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card: #111827;
+      --muted: #94a3b8;
+      --txt: #e5e7eb;
+      --brand: #22c55e;
+      --brand-2: #16a34a;
+      --danger: #ef4444;
+      --border: #1f2937;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial, sans-serif;
+      background: linear-gradient(180deg, #0b1220, #0b1220 40%, #0f172a);
+      color: var(--txt);
+    }
+    .container {
+      max-width: 1100px;
+      margin: 32px auto;
+      padding: 0 16px;
+    }
+    h1 { font-weight: 800; letter-spacing: -0.02em; margin: 0 0 16px; }
+    .subtitle { color: var(--muted); margin-bottom: 24px; }
+    .card {
+      background: rgba(17, 24, 39, 0.75);
+      backdrop-filter: blur(6px);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 16px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+    }
+
+    /* Search bar */
+    .search-grid {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      gap: 12px;
+    }
+    .field { display: flex; flex-direction: column; gap: 6px; }
+    label { font-size: 12px; color: var(--muted); }
+    input, select, button {
+      height: 42px;
+      padding: 0 12px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: #0b1220;
+      color: var(--txt);
+      outline: none;
+    }
+    input:focus, select:focus {
+      border-color: #334155;
+      box-shadow: 0 0 0 3px rgba(51,65,85,.35);
+    }
+    .btn {
+      cursor: pointer; display: inline-flex; align-items: center; justify-content: center;
+      gap: 8px; font-weight: 700; letter-spacing: .3px; border: 0;
+    }
+    .btn-primary { background: var(--brand); color: #02130a; }
+    .btn-primary:hover { background: var(--brand-2); }
+    .btn-ghost { background: transparent; border: 1px solid var(--border); }
+    .btn-danger { background: var(--danger); color: #fff; }
+    .full { width: 100%; }
+
+    /* Results */
+    .results { margin-top: 20px; display: grid; gap: 16px; }
+    .room-table { width: 100%; border-collapse: collapse; overflow: hidden; border-radius: 12px; }
+    .room-table th, .room-table td { padding: 12px; border-bottom: 1px solid var(--border); vertical-align: top; }
+    .room-table th { text-align: left; color: var(--muted); font-weight: 600; }
+    .badge { padding: 4px 10px; border-radius: 999px; border: 1px solid var(--border); color: var(--muted); font-size: 12px; }
+
+    /* Booking panel */
+    .booking-panel { display: none; margin-top: 20px; }
+    .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+    .totals { display: flex; align-items: center; justify-content: space-between; margin-top: 12px; }
+    .price { font-size: 24px; font-weight: 800; }
+
+    /* Toast */
+    .toast {
+      position: fixed; right: 16px; bottom: 16px; z-index: 9999;
+      background: #0b1220; border: 1px solid var(--border); color: var(--txt);
+      padding: 12px 14px; border-radius: 12px; display: none; box-shadow: 0 10px 30px rgba(0,0,0,.35);
+    }
+
+    /* Booking Confirmation Modal */
+    .modal-overlay {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.7); display: flex; align-items: center; justify-content: center;
+      z-index: 10000; opacity: 0; visibility: hidden; transition: opacity 0.3s ease, visibility 0.3s ease;
+    }
+    .modal-overlay.show { opacity: 1; visibility: visible; }
+    .modal-content {
+      background: var(--card); border: 1px solid var(--border); border-radius: 16px;
+      padding: 24px; width: 90%; max-width: 500px; box-shadow: 0 15px 40px rgba(0,0,0,0.35);
+      transform: translateY(-20px); transition: transform 0.3s ease;
+    }
+    .modal-overlay.show .modal-content { transform: translateY(0); }
+    .modal-content h2 { margin-top: 0; margin-bottom: 20px; color: var(--brand); }
+    .modal-details p { margin: 8px 0; display: flex; justify-content: space-between; }
+    .modal-details p strong { color: var(--txt); }
+    .modal-details p span { color: var(--muted); }
+    .modal-footer { display: flex; justify-content: flex-end; gap: 12px; margin-top: 24px; }
+
+    @media (max-width: 900px) {
+      .search-grid { grid-template-columns: 1fr 1fr; }
+      .grid-2 { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Vleafy Hotel Booking System</h1>
+    <div class="subtitle">Search availability, compare rate plans, and book.</div>
+
+    <!-- Search -->
+    <div class="card">
+      <div class="search-grid">
+        <div class="field">
+          <label for="checkIn">Check-in</label>
+          <input type="date" id="checkIn">
+        </div>
+        <div class="field">
+          <label for="checkOut">Check-out</label>
+          <input type="date" id="checkOut">
+        </div>
+        <div class="field">
+          <label for="adults">Adults</label>
+          <input type="number" id="adults" min="1" value="2">
+        </div>
+        <div class="field">
+          <label for="children">Children</label>
+          <input type="number" id="children" min="0" value="0">
+        </div>
+        <div class="field">
+          <label for="rateFilter">Rate Plan</label>
+          <select id="rateFilter">
+            <option value="ALL" selected>All</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>&nbsp;</label>
+          <button id="searchBtn" class="btn btn-primary full">Search</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Results / Comparison -->
+    <div id="results" class="results"></div>
+
+    <!-- Booking panel -->
+    <div id="bookingPanel" class="card booking-panel">
+      <h2 style="margin-top: 0;">Confirm your booking</h2>
+      <div class="grid-2">
+        <div class="field">
+          <label>Guest name</label>
+          <input type="text" id="guestName" placeholder="Full name">
+        </div>
+        <div class="field">
+          <label>Guest email</label>
+          <input type="email" id="guestEmail" placeholder="name@example.com">
+        </div>
+      </div>
+
+      <div class="totals">
+        <div>
+          <div class="badge" id="selectedSummary">—</div>
+        </div>
+        <div class="price" id="selectedTotal">₹ 0.00</div>
+      </div>
+
+      <div style="display:flex; gap:8px; margin-top:12px;">
+        <button class="btn btn-ghost" id="cancelBooking">Cancel</button>
+        <button class="btn btn-primary" id="confirmBooking">Book Now</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast"></div>
+
+  <!-- Booking Confirmation Modal -->
+  <div id="bookingConfirmationModal" class="modal-overlay">
+    <div class="modal-content">
+      <h2>Booking Confirmed!</h2>
+      <div class="modal-details">
+        <p><strong>Booking ID:</strong> <span id="modalBookingId"></span></p>
+        <p><strong>Guest Name:</strong> <span id="modalGuestName"></span></p>
+        <p><strong>Guest Email:</strong> <span id="modalGuestEmail"></span></p>
+        <p><strong>Check-in Date:</strong> <span id="modalCheckInDate"></span></p>
+        <p><strong>Check-out Date:</strong> <span id="modalCheckOutDate"></span></p>
+        <p><strong>Room Type:</strong> <span id="modalRoomType"></span></p>
+        <p><strong>Rate Plan:</strong> <span id="modalRatePlan"></span></p>
+        <p><strong>Total Price:</strong> <span id="modalTotalPrice">₹ 0.00</span></p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-ghost" id="closeConfirmationModal">Close</button>
+        <button class="btn btn-primary" id="printConfirmation">Print</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
