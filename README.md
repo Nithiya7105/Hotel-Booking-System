@@ -154,12 +154,8 @@ The system follows a client-server architecture:
     *   Processing new bookings and updating inventory.
 *   **Database (Google Sheets):** A structured Google Sheets spreadsheet serves as the persistent data store for all hotel information and bookings.
 
-## Deployment Guide
-
-1.  **Frontend:** The `index.html` and `script.js` files can be hosted on any static file hosting service (e.g., GitHub Pages, Netlify, Vercel, or even a simple web server).
-2.  **Backend:** Deploy the Google Apps Script as a Web App as described in the "Google Sheets Integration Documentation" section.
-3.  **Configuration:** Update the `API_URL` constant in `script.js` with the Web App URL obtained after deploying the Google Apps Script.
 
 ## Source Code Repository
 
 This project's source code will be provided in a GitHub repository.
+
