@@ -12,7 +12,7 @@ This is a simple hotel booking system that uses a Google Sheets spreadsheet as i
 ## Database (Google Sheets)
 
 The system uses the following Google Sheets spreadsheet as its backend:  
-https://docs.google.com/spreadsheets/d/1TmR9kC-Wc83Zw0kWRmC_oWcH0q33W7K1M6XvxaaiDps/edit?gid=768194239#gid=768194239
+https://docs.google.com/spreadsheets/d/1TmR9kC-Wc83Zw0kWRmC_oWcH0q33W7K1M6XvxaaiDps/edit?usp=sharing
 
 ## Data Management (Google Sheets)
 
@@ -163,6 +163,7 @@ The system follows a client-server architecture:
 ## Source Code Repository
 
 This project's source code will be provided in a GitHub repository.
+
 
 
 
