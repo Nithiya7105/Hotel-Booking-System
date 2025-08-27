@@ -9,6 +9,11 @@ This is a simple hotel booking system that uses a Google Sheets spreadsheet as i
 *   **Dynamic pricing display:** Prices are calculated and displayed in real-time based on room type, rate plan, number of guests, and duration of stay.
 *   **Responsive design:** The frontend is designed to be responsive across different devices.
 
+## Database (Google Sheets)
+
+The system uses the following Google Sheets spreadsheet as its backend:  
+[Hotel Booking Database](https://docs.google.com/spreadsheets/d/1TmR9kC-Wc83Zw0kWRmC_oWcH0q33W7K1M6XvxaaiDps/edit?gid=768194239#gid=768194239)
+
 ## Data Management (Google Sheets)
 
 The system uses a Google Sheets spreadsheet as its database. The following sheets are required:
@@ -158,4 +163,5 @@ The system follows a client-server architecture:
 ## Source Code Repository
 
 This project's source code will be provided in a GitHub repository.
+
 
